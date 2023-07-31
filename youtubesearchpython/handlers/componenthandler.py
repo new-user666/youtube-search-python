@@ -27,10 +27,27 @@ class ComponentHandler:
                 'title':                       self._getValue(video, ['title', 'accessibility', 'accessibilityData', 'label']),
                 'duration':                    self._getValue(video, ['lengthText', 'accessibility', 'accessibilityData', 'label']),
             },
+            'badges':                          self._getValue(video, ['badges']),
+            'ownerBadges':                     self._getValue(video, ['ownerBadges', 0,'metadataBadgeRenderer', 'tooltip'])
         }
         component['link'] = 'https://www.youtube.com/watch?v=' + component['id']
         component['channel']['link'] = 'https://www.youtube.com/channel/' + component['channel']['id']
         component['shelfTitle'] = shelfTitle
+        return component
+    
+    def _getShortsComponent(self, element: dict) -> dict:
+        shorts = element[shortsElementKey]
+        component = {
+            'type':                           'shorts',
+            'id':                              self._getValue(shorts, ['videoId']),
+            'title':                           self._getValue(shorts, ['headline', 'simpleText']),
+            'viewCount':                       self._getValue(shorts, ['viewCountText', 'simpleText']),
+            'thumbnails':                      self._getValue(shorts, ['thumbnail', 'thumbnails']),
+            'accessibility': {
+                'title':                       self._getValue(shorts, ['accessibility', 'accessibilityData', 'label']),
+            },
+        }
+        component['link'] = 'https://www.youtube.com/shorts' + component['id']
         return component
 
     def _getChannelComponent(self, element: dict) -> dict:
@@ -42,7 +59,8 @@ class ComponentHandler:
             'thumbnails':                      self._getValue(channel, ['thumbnail', 'thumbnails']),
             'videoCount':                      self._getValue(channel, ['videoCountText', 'runs', 0, 'text']),
             'descriptionSnippet':              self._getValue(channel, ['descriptionSnippet', 'runs']),
-            'subscribers':                     self._getValue(channel, ['subscriberCountText', 'simpleText']),
+            'subscribers':                     self._getValue(channel, ['videoCountText', 'simpleText']),
+            'username':                        self._getValue(channel, ['subscriberCountText', 'simpleText']),
         }
         component['link'] = 'https://www.youtube.com/channel/' + component['id']
         return component
@@ -163,6 +181,13 @@ class ComponentHandler:
         return {
             'title':                           self._getValue(shelf, ['title', 'simpleText']),
             'elements':                        self._getValue(shelf, ['content', 'verticalListRenderer', 'items']),
+        }
+    
+    def _getShortsShelfComponent(self, element: dict) -> dict:
+        shelf = element[shortsShelfElementKey]
+        return {
+            'title':                           self._getValue(shelf, ['title', 'simpleText']),
+            'elements':                        self._getValue(shelf, ['items']),
         }
 
     def _getValue(self, source: dict, path: List[str]) -> Union[str, int, dict, None]:
