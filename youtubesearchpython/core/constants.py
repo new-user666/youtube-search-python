@@ -14,9 +14,11 @@ userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML
 
 
 videoElementKey = 'videoRenderer'
+shortsElementKey = 'reelItemRenderer'
 channelElementKey = 'channelRenderer'
 playlistElementKey = 'playlistRenderer'
 shelfElementKey = 'shelfRenderer'
+shortsShelfElementKey = 'reelShelfRenderer'
 itemSectionKey = 'itemSectionRenderer'
 continuationItemKey = 'continuationItemRenderer'
 playerResponseKey = 'playerResponse'
