@@ -51,6 +51,7 @@ class SearchCore(RequestCore, RequestHandler, ComponentHandler):
         request = self.syncPostRequest()
         try:
             self.response = request.text
+            # open('search_result.json', 'w+').write(self.response)
         except:
             raise Exception('ERROR: Could not make request.')
 
@@ -113,15 +114,22 @@ class SearchCore(RequestCore, RequestHandler, ComponentHandler):
             if videoElementKey in element.keys() and findVideos:
                 self.resultComponents.append(self._getVideoComponent(element))
             if channelElementKey in element.keys() and findChannels:
-                self.resultComponents.append(self._getChannelComponent(element))
+                self.resultComponents.append(
+                    self._getChannelComponent(element))
             if playlistElementKey in element.keys() and findPlaylists:
-                self.resultComponents.append(self._getPlaylistComponent(element))
+                self.resultComponents.append(
+                    self._getPlaylistComponent(element))
             if shelfElementKey in element.keys() and findVideos:
                 for shelfElement in self._getShelfComponent(element)['elements']:
                     self.resultComponents.append(
                         self._getVideoComponent(shelfElement, shelfTitle=self._getShelfComponent(element)['title']))
+            if shortsShelfElementKey in element.keys():
+                for shelfElement in self._getShortsShelfComponent(element)['elements']:
+                    self.resultComponents.append(
+                        self._getShortsComponent(shelfElement))
             if richItemKey in element.keys() and findVideos:
-                richItemElement = self._getValue(element, [richItemKey, 'content'])
+                richItemElement = self._getValue(
+                    element, [richItemKey, 'content'])
                 ''' Initial fallback handling for VideosSearch '''
                 if videoElementKey in richItemElement.keys():
                     videoComponent = self._getVideoComponent(richItemElement)
